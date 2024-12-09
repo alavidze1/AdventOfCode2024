@@ -1,52 +1,57 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.Collections;
+import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
 
-        ArrayList<String> fileData = getFileData("testday11");
+        ArrayList<String> fileData = getFileData("day3input.txt");
         System.out.println(fileData);
-        ArrayList<Integer> newList = new ArrayList<Integer>(fileData.size());
-        String[] splitStr;
+        ArrayList<String[]> newList = new ArrayList<String[]>(fileData.size());
         for(int i=0;i<fileData.size();i++){
-            splitStr=fileData.get(i).split("\\s+");
-            for(int p=0;p< splitStr.length;p++){
-                newList.add(Integer.valueOf(splitStr[p]));
+            newList.add(fileData.get(i).split(" "));
+        }
+        int[][] numbers = new int[newList.size()][5];
+        for(int i = 0;i < newList.size();i++)
+        {
+            for(int o = 0;o < newList.get(i)[0].length();o++){
+                numbers[i][o] = Integer.parseInt(newList.get(i)[o]);
             }
 
         }
-        System.out.println(newList);
-        ArrayList<Integer> left = new ArrayList<Integer>(fileData.size()/2);
-        ArrayList<Integer> right = new ArrayList<Integer>(fileData.size()/2);
-        ArrayList<Integer> differences = new ArrayList<Integer>(fileData.size()/2);
-        for(int i=0; i<newList.size();i++){
-            if(i%2==0){
-                left.add(newList.get(i));
-            }else{
-                right.add(newList.get(i));
+        int count = 0;
+        int temp=0;
+        for(int i =0;i<numbers.length;i++){
+            if(isSafe(numbers[i])){
+                count++;
             }
         }
-        System.out.println(left);
-        Collections.sort(left);
-        System.out.println(right);
-        Collections.sort(right);
-        for(int i=0;i<left.size();i++){
-            differences.add(Math.abs((left.get(i)-right.get(i))));
-            System.out.println(Math.abs((left.get(i)-right.get(i))));
+        System.out.println(count);
+    }
+    public static boolean isSafe(int[] list){
+        boolean safe=false;
+        int[] arrSorted=list.clone();
+        int[] arrReversed=list.clone();
+        for (int i = 0; i < arrReversed.length / 2; i++) {
+            int t = arrReversed[i];
+            arrReversed[i] = arrReversed[arrReversed.length - 1 - i];
+            arrReversed[arrReversed.length - 1 - i] = t;
         }
-        int sum = 0;
-        for(int i = 0; i < differences.size(); i++) {
-            sum += differences.get(i);
-        }
-        System.out.println("New List size: "+ newList.size());
-        System.out.println("Left size: "+ left.size());
-        System.out.println("Right size: "+ right.size());
-        System.out.println("Differences size: "+ differences.size());
-        System.out.println(sum);
+        Arrays.sort(arrSorted);
+        if(Arrays.equals(arrSorted,list)||Arrays.equals(arrSorted,arrReversed)){
+            for(int i =1; i<list.length;i++){
+                if(Math.abs(list[i]-list[i-1])<=3){
+                    safe=true;
+                }else{
+                    safe=false;
+                }
+
+            }
+
+            }
+        return safe;
     }
 
     public static ArrayList<String> getFileData(String fileName) {
@@ -65,4 +70,5 @@ public class Main {
             return fileData;
         }
     }
+
 }
