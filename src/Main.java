@@ -22,6 +22,14 @@ public class Main {
         }
         int count = 0;
         int temp = 0;
+        for (int i = 0; i < numbers.length; i++){
+            for(int o=0;o<numbers[i].length;o++){
+                System.out.print(numbers[i][o]);
+                System.out.println();
+            }
+
+        }
+
         for (int i = 0; i < numbers.length; i++) {
             if (isSafe(numbers[i])) {
                 count++;
@@ -32,7 +40,6 @@ public class Main {
 
     public static boolean isSafe(int[] list) {
         boolean safe = false;
-        AreConsecutive consecutive = new AreConsecutive();
         int[] arrSorted = list.clone();
         int[] arrReversed = list.clone();
         for (int i = 0; i < arrReversed.length / 2; i++) {
@@ -47,11 +54,14 @@ public class Main {
                 if (Math.abs(list[1] - list[2]) <= 3) {
                     if (Math.abs(list[2] - list[3]) <= 3) {
                         if (Math.abs(list[3] - list[4]) <= 3) {
-                            if (areConsecutive)
+                            if (getConsecutiveNumbers(list)==0)
                                 safe = true;
+                                System.out.println(list[0]);
+                        }else{
+                            safe=false;
                         }
 
-                    }
+                    }else{safe=false;}
 
                 } else {
                     safe = false;
@@ -81,23 +91,17 @@ public class Main {
         }
     }
 
-    class AreConsecutive {
 
-/* The function checks if the array elements are consecutive
-If elements are consecutive, then returns true, else returns
-false */
 
-        boolean areConsecutive(int arr[], int n) {
-            //Sort the array
-            Arrays.sort(arr);
-            // checking the adjacent elements
-            for (int i = 1; i < n; i++) {
-                if (arr[i] != arr[i - 1] + 1) {
-                    return false;
-                }
+        public static int getConsecutiveNumbers(int [] list) {
+            int consecutives = 0;
+            for(int i = 1; i < list.length; i++) {
+                if(list[i] - list[i-1] == 1)
+                    consecutives++;
+
             }
-            return true;
+
+            return consecutives;
         }
 
     }
-}
